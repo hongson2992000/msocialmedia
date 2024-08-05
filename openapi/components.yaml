@@ -1,0 +1,71 @@
+components:
+  schemas:
+    Authentication:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjVmZTQwN2NhMGRjOTg3YmRiZjFkZDg2IiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE3MjI3MzcyNTcsImV4cCI6MTcyMjczODE1N30.fCY94p5lXiz8E8XYIBBzi1S0ravXt1Dspwd6tygBgDY
+        refresh_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjVmZTQwN2NhMGRjOTg3YmRiZjFkZDg2IiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE3MjI3MzcyNTcsImV4cCI6MTcyMjczODE1N30.fCY94p5lXiz8E8XYIBBzi1S0ravXt1Dspwd6tygBgDY
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: 65fe407ca0dc987bdbf1dd86
+        name:
+          type: string
+          example: Dao Hong Son
+        email:
+          type: string
+          example: admin@gmail.com
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: 2024-03-16T08:26:33.781Z
+        created_at:
+          type: string
+          format: ISO8601
+          example: 2024-03-16T08:26:33.781Z
+        updated_at:
+          type: string
+          format: ISO8601
+          example: 2024-03-16T08:26:33.781Z
+        verify:
+          $ref: '#/components/schemas/UserVerifyStatus'
+        twitter_circle:
+          type: array
+          items:
+            type: string
+            format: MongoId
+          example: ['65fe407ca0dc987bdbf1dd86']
+        bio:
+          type: string
+          example: 'This is my bio'
+        location:
+          type: string
+          example: 'HCM City'
+        website:
+          type: string
+          example: http://swagger.io
+        username:
+          type: string
+          example: hongson2992000
+        avatar:
+          type: string
+          example: http://swagger.io
+        cover_photo:
+          type: string
+          example: http://swagger.io
+    UserVerifyStatus:
+      type: number
+      enum: [Unverified, Verified, Banned]
+      example: 1
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
