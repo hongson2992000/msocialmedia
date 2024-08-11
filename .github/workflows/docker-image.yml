@@ -16,3 +16,7 @@ jobs:
         run: echo "${{ secrets.MSOCIAL_ENV_PRODUCTION }}" > .env.production
       - name: Build the Docker image
         run: docker build --progress=plain -t hongson2992000/msocial:v1 .
+      - name: Log in to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Push the Docker image
+        run: docker push hongson2992000/msocial:v1
