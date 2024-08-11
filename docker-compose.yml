@@ -1,0 +1,8 @@
+version: '3'
+services:
+  msocial:
+    image: hongson2992000/msocial:v0
+    ports:
+      - '4000:4000'
+    volumes:
+      - '~/C/SourceCode/twitter-clone-api/uploads:/app/uploads hongson2992000/msocial:v0'

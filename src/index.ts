@@ -2,29 +2,49 @@ import express from 'express'
 import databaseService from './services/database.services'
 import { defaultErrorHandler } from './middlewares/error.middlewares'
 import { initFolder } from './utils/file'
-import { config } from 'dotenv'
 import { UPLOAD_IMAGE_DIR } from './constants/dir'
 import mediaRouter from './routes/media.routes'
 import userRouter from './routes/users.routes'
 import staticRouter from './routes/static.routes'
-import cors, { CorsOptions } from 'cors'
 import { envConfig, isProduction } from './constants/config'
 import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmark.routes'
 import likeRouter from './routes/like.routes'
 import searchRouter from './routes/search.routes'
-// import '~/utils/fake'
 import '~/utils/s3'
 import { createServer } from 'http'
 import conversationRouter from './routes/conversation.routes'
 import initSocket from './utils/socket'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
+import cors, { CorsOptions } from 'cors'
+import helmet from 'helmet'
+import { rateLimit } from 'express-rate-limit'
+// import '~/utils/fake'
 
 //Create server
 const app = express()
 const httpServer = createServer(app)
 const port = envConfig.port || 3000
+
+//Helmet
+app.use(helmet())
+
+//CORS
+const corsOptions: CorsOptions = {
+  origin: isProduction ? envConfig.clientUrl : '*'
+}
+app.use(cors(corsOptions))
+
+// Rate limit
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+  legacyHeaders: false // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Redis, Memcached, etc. See below.
+})
+app.use(limiter)
 
 //Swagger
 const options: swaggerJSDoc.Options = {
@@ -48,12 +68,6 @@ databaseService.connectDB().then(() => {
   databaseService.indexFollowers()
   databaseService.indexTweets()
 })
-
-//CORS
-const corsOptions: CorsOptions = {
-  origin: isProduction ? envConfig.clientUrl : '*'
-}
-app.use(cors(corsOptions))
 
 // Create folder upload
 initFolder()

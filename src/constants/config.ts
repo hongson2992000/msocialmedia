@@ -1,6 +1,4 @@
 import { config } from 'dotenv'
-import fs from 'fs'
-import path from 'path'
 const env = process.env.NODE_ENV
 const envFilename = `.env.${env}`
 // if (!env) {
@@ -15,10 +13,11 @@ const envFilename = `.env.${env}`
 //   console.log(`Vui lòng tạo file ${envFilename} và tham khảo nội dung ở file .env.example`)
 //   process.exit(1)
 // }
-config({
-  path: envFilename
-})
 export const isProduction = env === 'production'
+
+config({
+  path: env ? `.env.${env}` : '.env'
+})
 
 export const envConfig = {
   port: (process.env.PORT as string) || 4000,
