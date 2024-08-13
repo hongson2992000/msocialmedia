@@ -35,5 +35,6 @@ jobs:
           script: |
             docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} -p ${{ secrets.DOCKER_HUB_PASSWORD }}
             docker pull hongson2992000/msocial:v3
+            docker stop msocial-media
             docker rm msocial-media
-            docker run -dp 3000:3000 --name msocial-media -v ~/msocial-media/uploads:/app/uploads hongson2992000/msocial:v3
+            docker run -dp 3000:3000 --name msocial-media --restart unless-stopped -v ~/msocial-media/uploads:/app/uploads hongson2992000/msocial:v3
